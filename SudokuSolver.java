@@ -14,13 +14,55 @@ public class SudokuSolver {
                 { 0, 9, 0, 0, 0, 0, 4, 0, 0 }
         };
         
-        System.out.println("Row: " + canFitRow(board, 8, 7));
-        System.out.println("Col: " + canFitCol(board, 8, 1));
-
-        System.out.println("Square: " + canFitSquare(board, 8, 0, 4));
+        solveSudoku(board);
+        System.out.println();
         
     }
 
+    public static boolean solveSudoku(int[][]board){
+        //Loop through the entire grid
+        for (int x = 0; x < board.length; x++) {
+            for (int y = 0; y < board[0].length; y++) {
+
+                //Check for 0s. 0s are blank spots
+                if (board[x][y] == 0){
+
+                    //Attempt to fill the blank with 1 through board.length+1 until success
+                    for (int n=1; n<board.length+1; n++){
+
+                        //
+                        if (numberIsValid(board, n, x, y)){
+                            board[x][y] = n;
+                            if (solveSudoku(board)){
+                                break;
+                            } else {
+                                board[x][y] = 0;
+                            }
+                        }
+                    }
+                    return false;
+                }
+            }
+        }
+        System.out.println("Solved Board");
+        printBoard(board);
+        return true;
+    }
+
+    public static void printBoard(int[][]board){
+        for (int x = 0; x < board.length; x++) {
+            for (int y = 0; y < board[0].length; y++) {
+                System.out.print(board[x][y] + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    public static boolean numberIsValid(int[][]board, int number, int row, int col){
+        return canFitRow(board, number, row) 
+            && canFitCol(board, number, col)
+            && canFitSquare(board, number, row, col);
+    }
     public static boolean canFitRow(int[][] board, int number, int row) {
         for (int x = 0; x < board.length; x++) {
             if (board[row][x] == number){
