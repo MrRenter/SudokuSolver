@@ -20,17 +20,19 @@ public class SudokuSolver {
     }
 
     public static boolean solveSudoku(int[][]board){
-        //Loop through the entire grid
+        //Loop through the entire grid.
         for (int x = 0; x < board.length; x++) {
             for (int y = 0; y < board[0].length; y++) {
 
-                //Check for 0s. 0s are blank spots
+                //Check for 0s. 0s are blank spots.
                 if (board[x][y] == 0){
 
-                    //Attempt to fill the blank with 1 through board.length+1 until success
+                    //Attempt to fill the blank with 1 through board.length+1 until success.
                     for (int n=1; n<board.length+1; n++){
 
-                        //
+                        //Check if the current number n can fit in this location. 
+                        //If so we set it to our position and forward the new board to a solver. 
+                        //We check if the new solve was successful or not. If not we revert changes.
                         if (numberIsValid(board, n, x, y)){
                             board[x][y] = n;
                             if (solveSudoku(board)){
@@ -40,10 +42,14 @@ public class SudokuSolver {
                             }
                         }
                     }
+                    //We tried all the possible number. No furture solutions exist.
                     return false;
                 }
             }
         }
+
+        //TODO: Need to figure out a way to return an int[][] instead of boolean.
+        //TODO: Print statement doesnt belong here
         System.out.println("Solved Board");
         printBoard(board);
         return true;
@@ -94,6 +100,4 @@ public class SudokuSolver {
         }
         return true;
     }
-
-
 }
